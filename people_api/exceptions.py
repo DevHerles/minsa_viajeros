@@ -17,8 +17,8 @@ from .models.errors import *
 
 __all__ = ("BaseAPIException", "BaseIdentifiedException", "NotFoundException",
            "AlreadyExistsException", "PersonNotFoundException",
-           "ComorbidityNotFoundException", "SymptomsNotFoundException",
-           "PersonAlreadyExistsException", "get_exception_responses")
+           "ComorbidityNotFoundException", "SymptomNotFoundException",
+           "PersonAlreadyExistsException", "get_exception_responses", "SymptomAlreadyExistsException")
 
 
 class BaseAPIException(Exception):
@@ -77,14 +77,18 @@ class ComorbidityNotFoundException(NotFoundException):
     message = "The comorbidity does not exist"
 
 
-class SymptomsNotFoundException(NotFoundException):
+class SymptomNotFoundException(NotFoundException):
     """Error raised when a symptoms does not exist"""
-    message = "The symptoms does not exist"
+    message = "The symptom does not exist"
 
 
 class PersonAlreadyExistsException(AlreadyExistsException):
     """Error raised when a person already exists"""
     message = "The person already exists"
+
+class SymptomAlreadyExistsException(AlreadyExistsException):
+    """Error raised when a symptom already exists"""
+    message = "The symptom already exists"
 
 
 def get_exception_responses(*args: Type[BaseAPIException]) -> dict:

@@ -12,7 +12,7 @@ from pydantic import Field
 from ..utils import get_time, get_uuid
 
 __all__ = ("PersonFields", "AddressFields", "ComorbidityFields",
-           "SymptomsFields")
+           "SymptomFields")
 
 _string = dict(min_length=1)
 """Common attributes for all String fields"""
@@ -124,7 +124,18 @@ class ComorbidityFields:
         **_unix_ts)
 
 
-class SymptomsFields:
+class SymptomFields:
+    person_id = Field(
+        description="Id de la persona",
+        example="62c64bab-1f44-49dc-9ba3-6af33c887a12",
+        **_string,
+    )
+    symptom_id = Field(description="Id de la síntoma",
+                       example="c7166343-0913-4dc2-91e5-569d7d66f905",
+                       **_string)
+    q1 = Field(description="Tos y/o dolor de garganta",
+               example="SI",
+               **_string)
     q1 = Field(description="Tos y/o dolor de garganta",
                example="SI",
                **_string)
@@ -141,6 +152,8 @@ class SymptomsFields:
                example="SI",
                **_string)
     q10 = Field(description="Otro (describir)", example="Otro", **_string)
+    latitude = Field(description="Latitud", example="12.123123", **_string)
+    longitude = Field(description="Longitud", example="12.123123", **_string)
     created = Field(
         alias="created",
         description="When the Symptoms was registered (Unix timestamp)",

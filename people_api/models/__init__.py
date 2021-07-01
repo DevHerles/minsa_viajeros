@@ -4,3 +4,6 @@ from .person_read import *
 from .person_address import *
 from .person_comorbidity import *
 from .person_symptoms import *
+from .symptom_update import *
+from .symptom_create import *
+from .symptom_read import *

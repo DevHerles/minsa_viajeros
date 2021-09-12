@@ -27,11 +27,3 @@ class SymptomUpdate(BaseModel):
     q8: str = SymptomFields.q8
     q9: str = SymptomFields.q9
     q10: str = SymptomFields.q10
-
-    def dict(self, **kwargs):
-        # The "birth" field must be converted to string (isoformat) when exporting to dict (for Mongo)
-        # TODO Better way to do this? (automatic conversion can be done with Config.json_encoders, but not available for dict
-        d = super().dict(**kwargs)
-        with suppress(KeyError):
-            d["birth"] = d.pop("birth").isoformat()
-        return d

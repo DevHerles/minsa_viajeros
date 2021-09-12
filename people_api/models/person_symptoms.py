@@ -16,18 +16,17 @@ __all__ = ("Symptoms", )
 
 class Symptoms(BaseModel):
     """The symptoms information of a person"""
-    q1: str = SymptomFields.q1
-    q2: str = SymptomFields.q2
-    q3: str = SymptomFields.q3
-    q4: str = SymptomFields.q4
-    q5: str = SymptomFields.q5
-    q6: str = SymptomFields.q6
-    q7: str = SymptomFields.q7
-    q8: str = SymptomFields.q8
-    q9: str = SymptomFields.q9
+    q1: bool = SymptomFields.q1
+    q2: bool = SymptomFields.q2
+    q3: bool = SymptomFields.q3
+    q4: bool = SymptomFields.q4
+    q5: bool = SymptomFields.q5
+    q6: bool = SymptomFields.q6
+    q7: bool = SymptomFields.q7
+    q8: bool = SymptomFields.q8
+    q9: bool = SymptomFields.q9
     q10: str = SymptomFields.q10
     created: Optional[date] = SymptomFields.created
-    updated: Optional[date] = SymptomFields.updated
 
     def dict(self, **kwargs):
         # The "birth" field must be converted to string (isoformat) when exporting to dict (for Mongo)
@@ -35,5 +34,4 @@ class Symptoms(BaseModel):
         d = super().dict(**kwargs)
         with suppress(KeyError):
             d["created"] = d.pop("created").isoformat()
-            d["updated"] = d.pop("updated").isoformat()
         return d

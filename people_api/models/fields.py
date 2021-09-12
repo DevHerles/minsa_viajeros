@@ -54,7 +54,9 @@ class PersonFields:
         description="Age of this person, if date of birth is specified",
         example=20)
     phone_number = Field(description="Phone number of this person",
-                         example=935397346)
+                         example=323232)
+    cellphone_number = Field(description="Cellphone number of this person",
+                             example=935397346)
     person_id = Field(
         description="Unique identifier of this person in the database",
         example=get_uuid(),
@@ -86,34 +88,22 @@ class AddressFields:
 
 
 class ComorbidityFields:
-    q1 = Field(description="Enfermedad cardiovascular",
-               example="SI",
-               **_string)
-    q2 = Field(description="Enfermedad renal crónica", example="SI", **_string)
-    q3 = Field(description="Enfermedad respiratoria crónica",
-               example="SI",
-               **_string)
-    q4 = Field(description="Enfermedad hepática crónica",
-               example="SI",
-               **_string)
-    q5 = Field(description="Diabetes", example="SI", **_string)
-    q6 = Field(description="Cáncer", example="SI", **_string)
-    q7 = Field(description="VIH", example="SI", **_string)
-    q8 = Field(description="Tuberculosis activa", example="SI", **_string)
-    q9 = Field(description="Transtornos neurológicos crónicos",
-               example="SI",
-               **_string)
-    q10 = Field(description="Transtornos de células falciformes",
-                example="SI",
-                **_string)
-    q11 = Field(description="Consumo de tabaco", example="SI", **_string)
-    q12 = Field(description="Obecidad severa (IMC > 40)",
-                example="SI",
-                **_string)
-    q13 = Field(description="Hipertensión", example="SI", **_string)
-    q14 = Field(description="Gestante", example="SI", **_string)
-    q15 = Field(description="Mayor de 60 años", example="SI", **_string)
-    q16 = Field(description="Personal de salud", example="SI", **_string)
+    q1 = Field(description="Enfermedad cardiovascular", example=True)
+    q2 = Field(description="Enfermedad renal crónica", example=True)
+    q3 = Field(description="Enfermedad respiratoria crónica", example=True)
+    q4 = Field(description="Enfermedad hepática crónica", example=True)
+    q5 = Field(description="Diabetes", example=True)
+    q6 = Field(description="Cáncer", example=True)
+    q7 = Field(description="VIH", example=True)
+    q8 = Field(description="Tuberculosis activa", example=True)
+    q9 = Field(description="Transtornos neurológicos crónicos", example=True)
+    q10 = Field(description="Transtornos de células falciformes", example=True)
+    q11 = Field(description="Consumo de tabaco", example=True)
+    q12 = Field(description="Obecidad severa (IMC > 40)", example=True)
+    q13 = Field(description="Hipertensión", example=True)
+    q14 = Field(description="Gestante", example=True)
+    q15 = Field(description="Mayor de 60 años", example=True)
+    q16 = Field(description="Personal de salud", example=True)
     created = Field(
         alias="created",
         description="When the comorbidity was registered (Unix timestamp)",
@@ -122,6 +112,20 @@ class ComorbidityFields:
         alias="updated",
         description="When the comorbidity was updated for the last time (Unix timestamp)",
         **_unix_ts)
+
+
+class EessFields:
+    code = Field(description="Código del establecimiento de salud",
+                 example="01",
+                 **_string)
+    name = Field(description="Nombre del establecimiento de salud",
+                 example="AMAZONAS",
+                 **_string)
+
+
+class DepartmentFields:
+    code = Field(description="Código", example="01", **_string)
+    name = Field(description="Nombre", example="AMAZONAS", **_string)
 
 
 class SymptomFields:
@@ -133,24 +137,16 @@ class SymptomFields:
     symptom_id = Field(description="Id de la síntoma",
                        example="c7166343-0913-4dc2-91e5-569d7d66f905",
                        **_string)
-    q1 = Field(description="Tos y/o dolor de garganta",
-               example="SI",
-               **_string)
-    q1 = Field(description="Tos y/o dolor de garganta",
-               example="SI",
-               **_string)
-    q2 = Field(description="Malestar general", example="SI", **_string)
-    q3 = Field(description="Fiebre > 38ºC", example="SI", **_string)
-    q4 = Field(description="Cefalea", example="SI", **_string)
-    q5 = Field(description="Congestión nasal", example="SI", **_string)
-    q6 = Field(description="Diarrea", example="SI", **_string)
-    q7 = Field(description="Dificultad para respirar", example="SI", **_string)
-    q8 = Field(description="Pérdida de olfato (Anosmia)",
-               example="SI",
-               **_string)
-    q9 = Field(description="Pérdida de gusto (Ageusia)",
-               example="SI",
-               **_string)
+    q1 = Field(description="Tos y/o dolor de garganta", example=True)
+    q1 = Field(description="Tos y/o dolor de garganta", example=True)
+    q2 = Field(description="Malestar general", example=True)
+    q3 = Field(description="Fiebre > 38ºC", example=True)
+    q4 = Field(description="Cefalea", example=True)
+    q5 = Field(description="Congestión nasal", example=True)
+    q6 = Field(description="Diarrea", example=True)
+    q7 = Field(description="Dificultad para respirar", example=True)
+    q8 = Field(description="Pérdida de olfato (Anosmia)", example=True)
+    q9 = Field(description="Pérdida de gusto (Ageusia)", example=True)
     q10 = Field(description="Otro (describir)", example="Otro", **_string)
     latitude = Field(description="Latitud", example="12.123123", **_string)
     longitude = Field(description="Longitud", example="12.123123", **_string)

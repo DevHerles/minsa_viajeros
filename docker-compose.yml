@@ -5,7 +5,7 @@ services:
     build:
       context: .
     ports:
-      - 5000:5000
+      - 80:5000
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
@@ -15,6 +15,8 @@ services:
 
   mongodb:
     image: mongo:latest
+    ports:
+      - 27017:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro

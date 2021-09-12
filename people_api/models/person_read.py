@@ -3,7 +3,7 @@ Person Read model. Inherits from PersonCreate and adds the person_id field, whic
 """
 
 # # Native # #
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional, List
 
 # # Installed # #
@@ -12,17 +12,32 @@ from dateutil.relativedelta import relativedelta
 
 # # Package # #
 from .person_create import PersonCreate
+from .person_update import PersonUpdate
 from .fields import PersonFields
+from .person_address import Address
+from .person_comorbidity import Comorbidity
+from .person_symptoms import Symptoms
+from .person_eess import Eess
 
 __all__ = ("PersonRead", "PeopleRead")
 
 
-class PersonRead(PersonCreate):
+class PersonRead(PersonUpdate):
     """Body of Person GET and POST responses"""
-    person_id: str = PersonFields.person_id
-    age: Optional[int] = PersonFields.age
-    created: int = PersonFields.created
-    updated: int = PersonFields.updated
+    contact_id: Optional[str] = PersonFields.person_id
+    parent_contact_id: Optional[str] = PersonFields.person_id
+    doc_type: Optional[str] = PersonFields.doc_type
+    doc_number: Optional[str] = PersonFields.doc_number
+    name: Optional[str] = PersonFields.name
+    first_name: Optional[str] = PersonFields.first_name
+    last_name: Optional[str] = PersonFields.last_name
+    birth: Optional[date] = PersonFields.birth
+    phone_number: Optional[str] = PersonFields.phone_number
+    cellphone_number: Optional[str] = PersonFields.cellphone_number
+    address: Optional[Address]
+    comorbidity: Optional[Comorbidity]
+    symptoms: Optional[List[Symptoms]]
+    eess: Optional[Eess]
 
     @pydantic.root_validator(pre=True)
     def _set_person_id(cls, data):

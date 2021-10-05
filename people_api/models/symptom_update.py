@@ -10,13 +10,15 @@ from contextlib import suppress
 
 # # Package # #
 from .common import BaseModel
-from .fields import SymptomFields
+from .fields import SymptomFields, ContactFields
 
 __all__ = ("SymptomUpdate", )
 
 
 class SymptomUpdate(BaseModel):
     """Body of Symptom PATCH requests"""
+    created: Optional[date] = ContactFields.start_date
+    is_suspicious: bool = SymptomFields.is_suspicious
     q1: str = SymptomFields.q1
     q2: str = SymptomFields.q2
     q3: str = SymptomFields.q3
@@ -27,3 +29,5 @@ class SymptomUpdate(BaseModel):
     q8: str = SymptomFields.q8
     q9: str = SymptomFields.q9
     q10: str = SymptomFields.q10
+    latitude: str = SymptomFields.latitude
+    longitude: str = SymptomFields.longitude

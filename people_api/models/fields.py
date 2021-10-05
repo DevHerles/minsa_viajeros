@@ -11,7 +11,7 @@ from pydantic import Field
 # # Package # #
 from ..utils import get_time, get_uuid
 
-__all__ = ("PersonFields", "AddressFields", "ComorbidityFields",
+__all__ = ("ContactFields", "AddressFields", "ComorbidityFields",
            "SymptomFields")
 
 _string = dict(min_length=1)
@@ -20,7 +20,7 @@ _unix_ts = dict(example=get_time())
 """Common attributes for all Unix timestamp fields"""
 
 
-class PersonFields:
+class ContactFields:
     name = Field(description="Name of this person", example="John", **_string)
     first_name = Field(description="First name of this person",
                        example="Doe",

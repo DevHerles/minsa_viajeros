@@ -3,44 +3,47 @@ Methods to interact with the database
 """
 
 # # Package # #
+from people_api.models.alarm_signal_create import AlarmSignalCreate
 from .models import *
 from .exceptions import *
 from .database import collection, symptomCollection
 from .utils import get_time, get_uuid
 
 __all__ = (
-    "PeopleRepository",
+    "ContactRepository",
     "SymptomsRepository",
 )
 
 
-class PeopleRepository:
+class ContactRepository:
     @staticmethod
-    def getByImei(imei: str) -> PersonRead:
+    def getByImei(imei: str) -> ContactRead:
         """Retrieve a single Person by its unique IMEI"""
         print(imei)
         document = collection.find_one({"imei": imei})
         if not document:
-            raise PersonNotFoundException(imei)
-        return PersonRead(**document)
+            raise ContactNotFoundException(imei)
+        return ContactRead(**document)
 
     @staticmethod
-    def get(person_id: str) -> PersonRead:
+    def get(contact_id: str) -> ContactRead:
         """Retrieve a single Person by its unique id"""
-        document = collection.find_one({"_id": person_id})
+        document = collection.find_one({"_id": contact_id})
         print(document)
         if not document:
-            raise PersonNotFoundException(person_id)
-        return PersonRead(**document)
+            raise ContactNotFoundException(contact_id)
+        return ContactRead(**document)
 
     @staticmethod
-    def list() -> PeopleRead:
+    def list() -> ContactsRead:
         """Retrieve all the available persons"""
         cursor = collection.find()
-        return [PersonRead(**document) for document in cursor]
+        # for document in cursor:
+        #     print(document)
+        return [ContactRead(**document) for document in cursor]
 
     @staticmethod
-    def create(create: PersonCreate) -> PersonRead:
+    def create(create: ContactCreate) -> ContactRead:
         """Create a person and return its Read object"""
         print(create)
         document = create.dict()
@@ -52,10 +55,10 @@ class PeopleRepository:
         result = collection.insert_one(document)
         assert result.acknowledged
 
-        return PeopleRepository.get(result.inserted_id)
+        return ContactRepository.get(result.inserted_id)
 
     @staticmethod
-    def update(person_id: str, update: PersonUpdate):
+    def update(contact_id: str, update: ContactUpdate):
         """Update a person by giving only the fields to update"""
         # record = collection.find_one({"_id": person_id})
         # if not record:
@@ -67,16 +70,56 @@ class PeopleRepository:
         # symptoms.append(document)
         # document["symptoms"] = symptoms
         # print(document)
-        result = collection.update_one({"_id": person_id}, {"$set": document})
+        result = collection.update_one({"_id": contact_id}, {"$set": document})
         if not result.modified_count:
-            raise PersonNotFoundException(identifier=person_id)
+            raise ContactNotFoundException(identifier=contact_id)
 
     @staticmethod
-    def delete(person_id: str):
+    def addSymptom(contact_id: str, update: SymptomUpdate):
+        """Add a person symptom by giving only the fields to update"""
+        # record = collection.find_one({"_id": person_id})
+        # if not record:
+        #     raise PersonNotFoundException(person_id)
+        document = update.dict()
+        document["updated"] = get_time()
+        # symptoms = record.pop("symptoms")
+        # print(symptoms)
+        # symptoms.append(document)
+        # document["symptoms"] = symptoms
+        # print(document)
+        result = collection.update_one({"_id": contact_id},
+                                       {"$push": {
+                                           "symptoms": document
+                                       }})
+        if not result.modified_count:
+            raise ContactNotFoundException(identifier=contact_id)
+
+    @staticmethod
+    def addAlarmSignal(contact_id: str, update: AlarmSignalCreate):
+        """Add a person symptom by giving only the fields to update"""
+        # record = collection.find_one({"_id": person_id})
+        # if not record:
+        #     raise PersonNotFoundException(person_id)
+        document = update.dict()
+        document["updated"] = get_time()
+        # symptoms = record.pop("symptoms")
+        # print(symptoms)
+        # symptoms.append(document)
+        # document["symptoms"] = symptoms
+        # print(document)
+        result = collection.update_one({"_id": contact_id},
+                                       {"$set": {
+                                           "symptoms.alarm_signal": document
+                                       }})
+        if not result.modified_count:
+            raise ContactNotFoundException(identifier=contact_id)
+
+    @staticmethod
+    def delete(contact_id: str):
         """Delete a person given its unique id"""
-        result = collection.delete_one({"_id": person_id})
+        result = collection.delete_one({"_id": contact_id})
         if not result.deleted_count:
-            raise PersonNotFoundException(identifier=person_id)
+            raise ContactNotFoundException(identifier=contact_id)
 
 
 class SymptomsRepository:

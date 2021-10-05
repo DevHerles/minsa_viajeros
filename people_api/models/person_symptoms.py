@@ -3,9 +3,11 @@ The symptoms of a person is part of the Person model
 """
 
 # # Native # #
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 from contextlib import suppress
+
+import pydantic
 
 from people_api.models.alarm_signal_update import AlarmSignal
 
@@ -27,10 +29,21 @@ class Symptoms(BaseModel):
     q7: bool = SymptomFields.q7
     q8: bool = SymptomFields.q8
     q9: bool = SymptomFields.q9
-    q10: str = SymptomFields.q10
+    q10: Optional[str] = SymptomFields.q10
     is_suspicious: bool = SymptomFields.is_suspicious
     created: Optional[date] = SymptomFields.created_at
+    updated: Optional[date] = SymptomFields.updated_at
     alarm_signal: Optional[AlarmSignal]
+    latitude: Optional[str] = SymptomFields.latitude
+    longitude: Optional[str] = SymptomFields.longitude
+
+    @pydantic.root_validator()
+    def _set_age(cls, data):
+        """Calculate the current age of the person from the date of birth, if any"""
+        today = datetime.now().date()
+        data["created"] = today
+        data["updated"] = today
+        return data
 
     def dict(self, **kwargs):
         # The "birth" field must be converted to string (isoformat) when exporting to dict (for Mongo)
@@ -38,4 +51,5 @@ class Symptoms(BaseModel):
         d = super().dict(**kwargs)
         with suppress(KeyError):
             d["created"] = d.pop("created").isoformat()
+            d["updated"] = d["created"]
         return d

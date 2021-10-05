@@ -8,7 +8,7 @@ from random import randint
 
 # # Project # #
 from people_api.models import *
-from people_api.repositories import PeopleRepository
+from people_api.repositories import ContactRepository
 
 # # Installed # #
 import pydantic
@@ -21,10 +21,10 @@ from .base import BaseTest
 from .utils import *
 
 
-class PersonAsCreate(PersonCreate):
+class PersonAsCreate(ContactCreate):
     """This model is used to convert PersonRead to PersonCreate,
      to compare the responses returned by the API with the create objects sent"""
-    class Config(PersonCreate.Config):
+    class Config(ContactCreate.Config):
         extra = pydantic.Extra.ignore
 
 
@@ -47,7 +47,7 @@ class TestCreate(BaseTest):
         create = get_person_create(birth=birth).dict()
 
         response = self.create_person(create)
-        response_as_read = PersonRead(**response.json())
+        response_as_read = ContactRead(**response.json())
 
         assert response_as_read.birth == birth
         assert response_as_read.age == expected_age
@@ -58,7 +58,7 @@ class TestCreate(BaseTest):
         create = get_person_create(birth=None).dict()
 
         response = self.create_person(create)
-        response_as_read = PersonRead(**response.json())
+        response_as_read = ContactRead(**response.json())
 
         assert response_as_read.birth is None
         assert response_as_read.age is None
@@ -72,7 +72,7 @@ class TestCreate(BaseTest):
 
         with freeze_time(iso_timestamp):
             create = get_person_create()
-            result = PeopleRepository.create(create)
+            result = ContactRepository.create(create)
 
         assert result.created == result.updated
         assert result.created == expected_timestamp
@@ -103,10 +103,10 @@ class TestUpdate(BaseTest):
         person = get_existing_person()
 
         new_name = get_uuid()
-        update = PersonUpdate(name=new_name)
+        update = ContactUpdate(name=new_name)
         self.update_person(person.person_id, update.dict())
 
-        read = PersonRead(**self.get_person(person.person_id).json())
+        read = ContactRead(**self.get_person(person.person_id).json())
         assert read.name == new_name
         assert read.dict() == {**person.dict(), "name": new_name, "updated": read.updated}
 
@@ -114,7 +114,7 @@ class TestUpdate(BaseTest):
         """Update the name of a person that does not exist.
         Should return not found 404 error and the identifier"""
         person_id = get_uuid()
-        update = PersonUpdate(name=get_uuid())
+        update = ContactUpdate(name=get_uuid())
 
         response = self.update_person(person_id, update.dict(), statuscode=statuscode.HTTP_404_NOT_FOUND)
         assert response.json()["identifier"] == person_id
@@ -140,11 +140,11 @@ class TestUpdate(BaseTest):
         person = get_existing_person()
 
         with freeze_time(iso_timestamp):
-            update = PersonUpdate(name=get_uuid())
-            PeopleRepository.update(person_id=person.person_id, update=update)
+            update = ContactUpdate(name=get_uuid())
+            ContactRepository.update(contact_id=person.person_id, update=update)
 
         read_response = self.get_person(person.person_id)
-        read = PersonRead(**read_response.json())
+        read = ContactRead(**read_response.json())
 
         assert read.updated == expected_timestamp
         assert read.updated != read.created

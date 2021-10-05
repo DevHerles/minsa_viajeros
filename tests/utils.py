@@ -8,7 +8,7 @@ from random import randint
 
 # # Project # #
 from people_api.models import *
-from people_api.repositories import PeopleRepository
+from people_api.repositories import ContactRepository
 from people_api.utils import get_uuid
 
 __all__ = (
@@ -28,7 +28,7 @@ def get_address(**kwargs):
 
 
 def get_person_create(**kwargs):
-    return PersonCreate(**{
+    return ContactCreate(**{
         "name": get_uuid(),
         "address": get_address(),
         "birth": datetime.now().date(),
@@ -37,4 +37,4 @@ def get_person_create(**kwargs):
 
 
 def get_existing_person(**kwargs):
-    return PeopleRepository.create(get_person_create(**kwargs))
+    return ContactRepository.create(get_person_create(**kwargs))

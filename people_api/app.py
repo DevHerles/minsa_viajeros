@@ -3,15 +3,17 @@ FastAPI app definition, initialization and definition of routes
 """
 
 # # Installed # #
+from people_api.models.alarm_signal_create import AlarmSignalCreate
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import status as statuscode
+from fastapi.responses import JSONResponse
 
 # # Package # #
 from .models import *
 from .exceptions import *
-from .repositories import PeopleRepository, SymptomsRepository
+from .repositories import ContactRepository, SymptomsRepository
 from .middlewares import request_handler
 from .settings import api_settings as settings
 
@@ -21,8 +23,6 @@ app = FastAPI(title=settings.title)
 app.middleware("http")(request_handler)
 
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
     "http://localhost",
     "http://localhost:8080",
 ]
@@ -37,52 +37,73 @@ app.add_middleware(
 
 
 @app.get("/imei/{imei}",
-         response_model=PersonRead,
+         response_model=ContactRead,
          description="Get a single person by its unique IMEI",
-         responses=get_exception_responses(PersonNotFoundException),
+         responses=get_exception_responses(ContactNotFoundException),
          tags=["people"])
-def _get_person(imei: str):
-    return PeopleRepository.getByImei(imei)
+def _get_contact(imei: str):
+    return ContactRepository.getByImei(imei)
 
 
 @app.get("/people",
-         response_model=PeopleRead,
+         response_model=ContactsRead,
          description="List all the available persons",
          tags=["people"])
-def _list_people():
+def _list_contacts():
     # TODO Filters
-    return PeopleRepository.list()
+    return ContactRepository.list()
 
 
-@app.get("/people/{person_id}",
-         response_model=PersonRead,
+@app.get("/people/{contact_id}",
+         response_model=ContactRead,
          description="Get a single person by its unique ID",
-         responses=get_exception_responses(PersonNotFoundException),
+         responses=get_exception_responses(ContactNotFoundException),
          tags=["people"])
-def _get_person(person_id: str):
-    return PeopleRepository.get(person_id)
+def _get_contact(contact_id: str):
+    return ContactRepository.get(contact_id)
 
 
 @app.post("/people",
           description="Create a new person",
-          response_model=PersonRead,
+          response_model=ContactRead,
           status_code=statuscode.HTTP_201_CREATED,
-          responses=get_exception_responses(PersonAlreadyExistsException),
+          responses=get_exception_responses(ContactAlreadyExistsException),
           tags=["people"])
-def _create_person(create: PersonCreate):
+def _create_person(create: ContactCreate):
     print(create)
-    return PeopleRepository.create(create)
+    return ContactRepository.create(create)
 
 
 @app.patch(
-    "/people/{person_id}",
+    "/people/{contact_id}",
     description="Update a single person by its unique ID, providing the fields to update",
     status_code=statuscode.HTTP_204_NO_CONTENT,
-    responses=get_exception_responses(PersonNotFoundException,
-                                      PersonAlreadyExistsException),
+    responses=get_exception_responses(ContactNotFoundException,
+                                      ContactAlreadyExistsException),
     tags=["people"])
-def _update_person(person_id: str, update: PersonUpdate):
-    PeopleRepository.update(person_id, update)
+def _update_contact(contact_id: str, update: ContactUpdate):
+    ContactRepository.update(contact_id, update)
+
+
+@app.patch(
+    "/people-symptom/{contact_id}",
+    description="Add a single symptom object for person by its unique ID, providing the fields to update",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(ContactNotFoundException,
+                                      ContactAlreadyExistsException),
+    tags=["people"])
+def _add_symptom(contact_id: str, update: SymptomUpdate):
+    ContactRepository.addSymptom(contact_id, update)
+
+@app.patch(
+    "/people-symptom-alarmsignal/{contact_id}",
+    description="Add a single symptom object for person by its unique ID, providing the fields to update",
+    status_code=statuscode.HTTP_204_NO_CONTENT,
+    responses=get_exception_responses(ContactNotFoundException,
+                                      ContactAlreadyExistsException),
+    tags=["people"])
+def _add_alarmsignal(contact_id: str, update: AlarmSignalCreate):
+    ContactRepository.addAlarmSignal(contact_id, update)
 
 
 # Symtoms
@@ -92,10 +113,10 @@ def _update_person(person_id: str, update: PersonUpdate):
          response_model=SymptomsRead,
          description="List all the available symptoms",
          tags=["symptoms"])
-def _list_person_symptoms(person_id: str):
+def _list_person_symptoms(contact_id: str):
     # TODO Filters
-    print(person_id)
-    return SymptomsRepository.list(person_id)
+    print(contact_id)
+    return SymptomsRepository.list(contact_id)
 
 
 @app.get("/symptoms",
@@ -149,10 +170,10 @@ def _delete_symptom(symptom_id: str):
 @app.delete("/people/{person_id}",
             description="Delete a single person by its unique ID",
             status_code=statuscode.HTTP_204_NO_CONTENT,
-            responses=get_exception_responses(PersonNotFoundException),
+            responses=get_exception_responses(ContactNotFoundException),
             tags=["people"])
-def _delete_person(person_id: str):
-    PeopleRepository.delete(person_id)
+def _delete_person(contact_id: str):
+    ContactRepository.delete(contact_id)
 
 
 def run():

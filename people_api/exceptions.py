@@ -16,9 +16,9 @@ from fastapi import status as statuscode
 from .models.errors import *
 
 __all__ = ("BaseAPIException", "BaseIdentifiedException", "NotFoundException",
-           "AlreadyExistsException", "PersonNotFoundException",
+           "AlreadyExistsException", "ContactNotFoundException",
            "ComorbidityNotFoundException", "SymptomNotFoundException",
-           "PersonAlreadyExistsException", "get_exception_responses", "SymptomAlreadyExistsException")
+           "ContactAlreadyExistsException", "get_exception_responses", "SymptomAlreadyExistsException")
 
 
 class BaseAPIException(Exception):
@@ -67,7 +67,7 @@ class AlreadyExistsException(BaseIdentifiedException):
     model = AlreadyExistsError
 
 
-class PersonNotFoundException(NotFoundException):
+class ContactNotFoundException(NotFoundException):
     """Error raised when a person does not exist"""
     message = "The person does not exist"
 
@@ -82,7 +82,7 @@ class SymptomNotFoundException(NotFoundException):
     message = "The symptom does not exist"
 
 
-class PersonAlreadyExistsException(AlreadyExistsException):
+class ContactAlreadyExistsException(AlreadyExistsException):
     """Error raised when a person already exists"""
     message = "The person already exists"
 

@@ -28,6 +28,7 @@ class PeopleRepository:
     def get(person_id: str) -> PersonRead:
         """Retrieve a single Person by its unique id"""
         document = collection.find_one({"_id": person_id})
+        print(document)
         if not document:
             raise PersonNotFoundException(person_id)
         return PersonRead(**document)

@@ -70,6 +70,7 @@ def _get_person(person_id: str):
           responses=get_exception_responses(PersonAlreadyExistsException),
           tags=["people"])
 def _create_person(create: PersonCreate):
+    print(create)
     return PeopleRepository.create(create)
 
 

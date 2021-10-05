@@ -15,8 +15,8 @@ class PersonCreate(PersonUpdate):
     """Body of Person POST requests"""
     name: str = PersonFields.name
     first_name: str = PersonFields.first_name
-    last_name: str = PersonFields.last_name
-    phone_number: str = PersonFields.phone_number
+    last_name: Optional[str] = PersonFields.last_name
+    alternative_cellphone_number: str = PersonFields.alternative_cellphone_number
     doc_type: str = PersonFields.doc_type
     doc_number: str = PersonFields.doc_number
     # Birth remains Optional, so is not required to re-declare

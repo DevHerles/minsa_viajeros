@@ -26,8 +26,7 @@ class PersonFields:
                        example="Doe",
                        **_string)
     last_name = Field(description="Last name of this person",
-                      example="Smith",
-                      **_string)
+                      example="Smith",)
 
     doc_type = Field(description="Document type of this person",
                      example="DNI",
@@ -50,11 +49,14 @@ class PersonFields:
     birth = Field(
         description="Date of birth, in format YYYY-MM-DD, or Unix timestamp",
         example="1999-12-31")
+    start_date = Field(
+        description="Symptom register start date, in format YYYY-MM-DD, or Unix timestamp",
+        example="2021-10-04")
     age = Field(
         description="Age of this person, if date of birth is specified",
         example=20)
-    phone_number = Field(description="Phone number of this person",
-                         example=323232)
+    alternative_cellphone_number = Field(description="Alternative Cellphone number of this person",
+                         example=935397346)
     cellphone_number = Field(description="Cellphone number of this person",
                              example=935397346)
     person_id = Field(
@@ -148,13 +150,23 @@ class SymptomFields:
     q8 = Field(description="Pérdida de olfato (Anosmia)", example=True)
     q9 = Field(description="Pérdida de gusto (Ageusia)", example=True)
     q10 = Field(description="Otro (describir)", example="Otro", **_string)
+    is_suspicious = Field(description="¿Es sospechoso?", example=True)
     latitude = Field(description="Latitud", example="12.123123", **_string)
     longitude = Field(description="Longitud", example="12.123123", **_string)
-    created = Field(
+    alarm_signal = Field(description="Signos de alarma", **_string)
+    created_at = Field(
         alias="created",
         description="When the Symptoms was registered (Unix timestamp)",
         **_unix_ts)
-    updated = Field(
+    updated_at = Field(
         alias="updated",
         description="When the symptoms was updated for the last time (Unix timestamp)",
         **_unix_ts)
+
+class AlarmSignalFields:
+    q1 = Field(description="Disnea", example=True)
+    q2 = Field(description="Taquipedia (>=22 rpm)", example=True)
+    q3 = Field(description="Saturación de oxígeno < 92%", example=True)
+    q4 = Field(description="Alteración de la conciencia", example=True)
+    q5 = Field(description="Otro signo", example=True)
+    q6 = Field(description="Ninguno", example=True)

@@ -3,8 +3,10 @@ Person Read model. Inherits from PersonCreate and adds the person_id field, whic
 """
 
 # # Native # #
-from datetime import datetime
+from datetime import date, datetime
+
 from typing import Optional, List
+from people_api.models.alarm_signal_update import AlarmSignal
 
 # # Installed # #
 import pydantic
@@ -31,9 +33,12 @@ class SymptomRead(SymptomCreate):
     q8: str = SymptomFields.q8
     q9: str = SymptomFields.q9
     q10: str = SymptomFields.q10
+    is_suspicious: bool = SymptomFields.is_suspicious
     latitude: Optional[str] = SymptomFields.latitude
     longitude: Optional[str] = SymptomFields.longitude
-
+    createt_at : Optional[date] = SymptomFields.created_at
+    alarm_signal: Optional[AlarmSignal]
+    
     @pydantic.root_validator(pre=True)
     def _set_symptom_id(cls, data):
         """Swap the field _id to symptom_id (this could be done with field alias, by setting the field as "_id"

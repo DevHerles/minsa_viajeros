@@ -18,5 +18,5 @@ class Address(BaseModel):
     """The address information of a person"""
     department: Optional[Department]
     province: Optional[Province]
-    distritct: Optional[District]
+    district: Optional[District]
     street: str = AddressFields.street

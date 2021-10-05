@@ -8,6 +8,8 @@ from datetime import date
 from typing import Optional, List
 from contextlib import suppress
 
+from people_api.models.alarm_signal_update import AlarmSignal
+
 # # Package # #
 from .common import BaseModel
 from .fields import PersonFields, AddressFields, ComorbidityFields
@@ -29,12 +31,13 @@ class PersonUpdate(BaseModel):
     first_name: Optional[str] = PersonFields.first_name
     last_name: Optional[str] = PersonFields.last_name
     birth: Optional[date] = PersonFields.birth
-    phone_number: Optional[str] = PersonFields.phone_number
+    start_date: Optional[date] = PersonFields.start_date
+    alternative_cellphone_number: Optional[str] = PersonFields.alternative_cellphone_number
     cellphone_number: Optional[str] = PersonFields.cellphone_number
     address: Optional[Address]
     comorbidity: Optional[Comorbidity]
     symptoms: Optional[List[Symptoms]]
-    eess: Optional[Eess]
+    # eess: Optional[Eess]
 
     def dict(self, **kwargs):
         # The "birth" field must be converted to string (isoformat) when exporting to dict (for Mongo)
@@ -42,4 +45,5 @@ class PersonUpdate(BaseModel):
         d = super().dict(**kwargs)
         with suppress(KeyError):
             d["birth"] = d.pop("birth").isoformat()
+            d["start_date"] = d.pop("start_date").isoformat()
         return d

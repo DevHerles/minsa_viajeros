@@ -5,6 +5,7 @@ Person Read model. Inherits from PersonCreate and adds the person_id field, whic
 # # Native # #
 from datetime import date, datetime
 from typing import Optional, List
+from people_api.models.alarm_signal_update import AlarmSignal
 
 # # Installed # #
 import pydantic
@@ -32,12 +33,14 @@ class PersonRead(PersonUpdate):
     first_name: Optional[str] = PersonFields.first_name
     last_name: Optional[str] = PersonFields.last_name
     birth: Optional[date] = PersonFields.birth
-    phone_number: Optional[str] = PersonFields.phone_number
+    start_date: Optional[date] = PersonFields.start_date
+    alternative_cellphone_number: Optional[str] = PersonFields.alternative_cellphone_number
     cellphone_number: Optional[str] = PersonFields.cellphone_number
     address: Optional[Address]
     comorbidity: Optional[Comorbidity]
     symptoms: Optional[List[Symptoms]]
     eess: Optional[Eess]
+    alarm_signal: Optional[AlarmSignal]
 
     @pydantic.root_validator(pre=True)
     def _set_person_id(cls, data):

@@ -7,6 +7,8 @@ from datetime import date
 from typing import Optional
 from contextlib import suppress
 
+from people_api.models.alarm_signal_update import AlarmSignal
+
 # # Package # #
 from .common import BaseModel
 from .fields import SymptomFields
@@ -26,7 +28,9 @@ class Symptoms(BaseModel):
     q8: bool = SymptomFields.q8
     q9: bool = SymptomFields.q9
     q10: str = SymptomFields.q10
-    created: Optional[date] = SymptomFields.created
+    is_suspicious: bool = SymptomFields.is_suspicious
+    created: Optional[date] = SymptomFields.created_at
+    alarm_signal: Optional[AlarmSignal]
 
     def dict(self, **kwargs):
         # The "birth" field must be converted to string (isoformat) when exporting to dict (for Mongo)
